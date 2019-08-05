@@ -1,0 +1,136 @@
+<div class="header">
+  <div class="header--wrapper">
+    <div class="input-group stylish-input-group">
+      <input #search [(ngModel)]="filterName" type="text" placeholder="Type to search...">
+      <span class="input-group-addon">
+      <span class="material-icons">search</span>
+    </span>
+    </div>
+    <div class="divider"></div>
+    <div></div>
+  </div>
+</div>
+<div class="filter-block not-edit-btn">
+  <div class="item">
+    Hops <span *ngIf="total > 0">{{total}} entries</span>
+  </div>
+  <div class="input-grid">
+    <!--<div class="input-box">-->
+    <!--<mat-form-field>-->
+    <!--<mat-select [(value)]="selectedHop" >-->
+    <!--<mat-option value="add-fermentables-malt">Malt</mat-option>-->
+    <!--<mat-option value="create">Hop</mat-option>-->
+    <!--<mat-option value="add-new-misc">Misc</mat-option>-->
+    <!--<mat-option value="add-new-yeast">Yeast</mat-option>-->
+    <!--<mat-option value="add-new-type">Type</mat-option>-->
+    <!--</mat-select>-->
+    <!--<img src="./assets/img/Colour.png" alt="icon">-->
+    <!--</mat-form-field>-->
+    <!--</div>-->
+    <a (click)="navigate('create')" class="btn">{{'ADD_NEW' | translate}}</a>
+  </div>
+  <div class="sort-block">
+    <a>
+      <i class="uikon">view_list</i>
+    </a>
+    <div class="divider"></div>
+    <a>
+      <i class="uikon">view_grid</i>
+    </a>
+  </div>
+  <div class="filter">
+    <button type="button"><img src="../../assets/img/sort3.png" alt="">Filter</button>
+    <div class="editDeleteWrapperBtn">
+      <button type="button" (click)="delete()" [disabled]="isDisabled">
+        <i class="material-icons">
+          delete
+        </i>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="grid">
+  <div class="body">
+    <ngx-datatable #table
+                   class="material fullscreen hopComponent"
+                   [rows]="rows"
+                   [loadingIndicator]="loadingIndicator"
+                   [columnMode]="'standart'"
+                   [headerHeight]="headerHeight"
+                   [footerHeight]="headerHeight"
+                   [rowHeight]="rowHeight"
+                   [selectionType]="'checkbox'"
+                   [selectAllRowsOnPage]="false"
+                   (select)='onSelect($event)'
+    >
+      <ngx-datatable-column
+        [sortable]="false"
+        [canAutoResize]="false"
+        [draggable]="false"
+        [resizeable]="false"
+        [headerCheckboxable]="true"
+        [checkboxable]="true">
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="name">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <a routerLink="/recipe-hop-list/edit/{{row.id}}">{{row.name}}</a>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="type">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          {{getValueByIdFromEntitiesList(hopTypes, value)}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="alpha"></ngx-datatable-column>
+
+      <ngx-datatable-column name="beta"></ngx-datatable-column>
+
+      <ngx-datatable-column name="origin">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          {{getValueByIdFromEntitiesList(origins, value)}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="form">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          {{getValueByIdFromEntitiesList(forms, value)}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="date"></ngx-datatable-column>
+
+      <ngx-datatable-footer *ngIf="total > pSize">
+        <ng-template ngx-datatable-footer-template>
+          <datatable-pager
+            [pagerLeftArrowIcon]="'datatable-icon-left'"
+            [pagerRightArrowIcon]="'datatable-icon-right'"
+            [pagerPreviousIcon]="'datatable-icon-prev'"
+            [pagerNextIcon]="'datatable-icon-skip'"
+            [size]="pSize"
+            [count]="total"
+            (change)="onPageChanged($event)">
+          </datatable-pager>
+        </ng-template>
+      </ngx-datatable-footer>
+      <!--<ngx-datatable-column [sortable]="false" [resizeable]="false">-->
+      <!--<ng-template let-row="row" ngx-datatable-cell-template>-->
+      <!--<span class="uikon" [matMenuTriggerFor]="menu">more</span>-->
+      <!--<mat-menu #menu="matMenu">-->
+      <!--<button mat-menu-item (click)="editProduct()">-->
+      <!--<span>Edit</span>-->
+      <!--</button>-->
+      <!--<button mat-menu-item (click)="deleteProduct()">-->
+      <!--<span>Delete</span>-->
+      <!--</button>-->
+      <!--<button mat-menu-item (click)="add()">-->
+      <!--<span>Add</span>-->
+      <!--</button>-->
+      <!--</mat-menu>-->
+      <!--</ng-template>-->
+      <!--</ngx-datatable-column>-->
+    </ngx-datatable>
+  </div>
+</div>
